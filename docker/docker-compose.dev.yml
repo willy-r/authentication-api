@@ -1,0 +1,30 @@
+version: '3.9'
+name: authentication-api
+
+services:
+  db-postgresql-dev:
+    image: postgres:15.2-alpine
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: development
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
+
+
+volumes:
+  db-data:

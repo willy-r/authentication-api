@@ -24,6 +24,7 @@ module.exports = {
         tabWidth: 2,
         arrowParens: 'always',
         endOfLine: 'auto',
+        singleQuote: true,
       },
     ],
     '@typescript-eslint/interface-name-prefix': 'off',
