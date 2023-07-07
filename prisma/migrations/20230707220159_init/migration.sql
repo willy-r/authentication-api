@@ -8,7 +8,7 @@ CREATE TABLE "users" (
     "name" TEXT,
     "hashed_password" TEXT NOT NULL,
     "role" "UserRole" NOT NULL DEFAULT 'USER',
-    "hashed_refresh_token" TEXT NOT NULL,
+    "hashed_refresh_token" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
