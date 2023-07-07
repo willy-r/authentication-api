@@ -2,7 +2,7 @@ version: '3.9'
 name: authentication-api
 
 services:
-  nest-auth-api:
+  nest-api:
     build:
       context: ../
       dockerfile: ./docker/dockerfile.nest.dev
@@ -16,6 +16,7 @@ services:
       # App
       - APP_PORT=3000
       - APP_ENV=development
+      - APP_ALLOWED_ORIGINS=https://example.com/
 
       # Database
       - DATABASE_URL=postgresql://admin:admin123@db-postgresql-dev:5432/development
