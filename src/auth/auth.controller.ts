@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { SignUpDto } from './dtos';
 import { plainToInstance } from 'class-transformer';
 import { UserResponseDto } from '../user/dtos';
+import { TokensInfo } from './types';
 
 @Controller('auth')
 export class AuthController {
@@ -14,9 +15,8 @@ export class AuthController {
   }
 
   @Post('signup')
-  async signUp(@Body() signUpDto: SignUpDto): Promise<UserResponseDto> {
-    const user = await this.authService.signUp(signUpDto);
-    return plainToInstance(UserResponseDto, user);
+  async signUp(@Body() signUpDto: SignUpDto): Promise<TokensInfo> {
+    return await this.authService.signUp(signUpDto);
   }
 
   @Get('logout')

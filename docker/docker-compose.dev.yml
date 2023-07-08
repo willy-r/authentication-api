@@ -24,6 +24,8 @@ services:
       # JWT
       - ACCESS_TOKEN_SECRET=access-token-secret
       - ACCESS_TOKEN_EXPIRES=15m
+      - REFRESH_TOKEN_SECRET=refresh-token-secret
+      - REFRESH_TOKEN_EXPIRES=7d
     depends_on:
       db-postgresql-dev:
         condition: service_healthy
