@@ -25,4 +25,19 @@ export class UserService {
       throw err;
     }
   }
+
+  async updateHashedRefreshToken(
+    userId: string,
+    refreshToken: string
+  ): Promise<void> {
+    const hashedRefreshToken = await argon2.hash(refreshToken);
+    await this.prismaService.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        hashedRefreshToken,
+      },
+    });
+  }
 }

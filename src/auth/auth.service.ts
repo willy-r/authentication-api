@@ -21,15 +21,18 @@ export class AuthService {
   async signUp(signUpDto: SignUpDto): Promise<TokensInfo> {
     const user = await this.userService.create(signUpDto);
 
-    // Sign tokens
     const tokens = await this.signTokens({
       sub: user.id,
       email: user.email,
       role: user.role,
     });
+
+    await this.userService.updateHashedRefreshToken(
+      user.id,
+      tokens.refreshToken
+    );
+
     return tokens;
-    // Updates user refresh token on db
-    // Return tokens
   }
 
   logout() {
@@ -45,13 +48,19 @@ export class AuthService {
       secret: this.configService.get('ACCESS_TOKEN_SECRET'),
       expiresIn: this.configService.get('ACCESS_TOKEN_EXPIRES'),
     };
+    const refreshTokenOptions: JwtSignOptions = {
+      secret: this.configService.get('REFRESH_TOKEN_SECRET'),
+      expiresIn: this.configService.get('REFRESH_TOKEN_EXPIRES'),
+    };
 
-    const [accessToken] = await Promise.all([
+    const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(jwtPayload, accessTokenOptions),
+      this.jwtService.signAsync(jwtPayload, refreshTokenOptions),
     ]);
 
     return {
       accessToken,
+      refreshToken,
       accessType: 'Bearer',
     };
   }
