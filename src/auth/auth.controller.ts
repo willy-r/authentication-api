@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dtos';
+import { plainToInstance } from 'class-transformer';
+import { UserResponseDto } from '../user/dtos';
 
 @Controller('auth')
 export class AuthController {
@@ -12,8 +14,9 @@ export class AuthController {
   }
 
   @Post('signup')
-  signUp(@Body() signUpDto: SignUpDto) {
-    return this.authService.signUp(signUpDto);
+  async signUp(@Body() signUpDto: SignUpDto): Promise<UserResponseDto> {
+    const user = await this.authService.signUp(signUpDto);
+    return plainToInstance(UserResponseDto, user);
   }
 
   @Get('logout')
