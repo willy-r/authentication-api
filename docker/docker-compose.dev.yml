@@ -20,6 +20,10 @@ services:
 
       # Database
       - DATABASE_URL=postgresql://admin:admin123@db-postgresql-dev:5432/development
+
+      # JWT
+      - ACCESS_TOKEN_SECRET=access-token-secret
+      - ACCESS_TOKEN_EXPIRES=15m
     depends_on:
       db-postgresql-dev:
         condition: service_healthy

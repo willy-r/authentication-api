@@ -12,13 +12,12 @@ export class UserService {
     const { password, ...data } = createUserDto;
     const hashedPassword = await argon2.hash(password);
     try {
-      const user = await this.prismaService.user.create({
+      return await this.prismaService.user.create({
         data: {
           ...data,
           hashedPassword,
         },
       });
-      return user;
     } catch (err) {
       if (err?.code === 'P2002') {
         throw new ConflictException('Email already exists');

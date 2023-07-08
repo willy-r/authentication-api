@@ -11,9 +11,14 @@ export class AuthService {
     return 'I am sign in!';
   }
 
-  async signUp(signUpDto: SignUpDto): Promise<User> {
-    return this.userService.create(signUpDto);
-  }
+  // async signUp(signUpDto: SignUpDto): Promise<User> {
+  //   const user = await this.userService.create(signUpDto);
+
+  //   // Sign tokens
+  //   // const tokens =
+  //   // Updates user refresh token on db
+  //   // Return tokens
+  // }
 
   logout() {
     return 'I am logout';
