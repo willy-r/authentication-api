@@ -12,10 +12,10 @@ export class JwtGuard extends AuthGuard('jwt') {
   canActivate(
     context: ExecutionContext
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const isPublicRoute = this.reflector.getAllAndOverride('isPublicRoute', [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const isPublicRoute = this.reflector.getAllAndOverride<boolean>(
+      'isPublicRoute',
+      [context.getHandler(), context.getClass()]
+    );
 
     if (isPublicRoute) {
       return true;

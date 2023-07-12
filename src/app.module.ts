@@ -9,7 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './config/prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { JwtGuard } from './auth/guards';
+import { JwtGuard } from './shared/guards';
 import { LoggerMiddleware } from './shared/middlewares';
 import { validate } from './config/env/env.validation';
 

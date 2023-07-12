@@ -7,12 +7,12 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { SignInDto, SignUpDto } from './dtos';
 import { TokensInfo } from './types';
-import { JwtRefreshGuard } from './guards';
-import { GetCurrentUser, MakePublic } from 'src/shared/decorators';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtRefreshGuard } from '../shared/guards';
+import { GetCurrentUser, MakePublic } from '../shared/decorators';
 
 @Controller('auth')
 @ApiTags('auth')
