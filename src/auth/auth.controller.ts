@@ -12,8 +12,10 @@ import { SignInDto, SignUpDto } from './dtos';
 import { TokensInfo } from './types';
 import { JwtRefreshGuard } from './guards';
 import { GetCurrentUser, MakePublic } from 'src/shared/decorators';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -30,12 +32,14 @@ export class AuthController {
     return await this.authService.signUp(signUpDto);
   }
 
+  @ApiBearerAuth()
   @Get('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
   async logout(@GetCurrentUser('sub') userId: string): Promise<void> {
     return await this.authService.logout(userId);
   }
 
+  @ApiBearerAuth()
   @MakePublic()
   @UseGuards(JwtRefreshGuard)
   @Get('refresh')

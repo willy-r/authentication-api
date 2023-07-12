@@ -4,6 +4,7 @@ import { PrismaService } from './config/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { Environment } from './config/env/enums/environment.enum';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   // App core.
@@ -24,6 +25,18 @@ async function bootstrap() {
   if (configService.get('APP_ENV') === Environment.Production) {
     app.useLogger(false);
   }
+
+  const config = new DocumentBuilder()
+    .setTitle('Authentication API')
+    .setDescription(
+      `**Authentication API with Nest.js**  
+      You can check the repository [*here*](https://github.com/willy-r/authentication-api)!
+      `
+    )
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
 
   // Init server.
   const PORT = configService.get('APP_PORT');
