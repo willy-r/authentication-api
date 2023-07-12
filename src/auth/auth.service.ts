@@ -18,7 +18,7 @@ export class AuthService {
     const user = await this.userService.findOneByEmail(signInDto.email);
 
     const passwordMatches = await argon2.verify(
-      user?.hashedPassword || (await argon2.hash('dummy-pwd')),
+      user?.hashedPassword || (await argon2.hash('dummy-pwd')), // To avoid timing attacks.
       signInDto.password
     );
 
@@ -63,8 +63,40 @@ export class AuthService {
     await this.userService.removeHashedRefreshToken(userId);
   }
 
-  refreshTokens() {
-    return 'I am refresh tokens';
+  async refreshTokens(
+    userId: string,
+    refreshToken: string
+  ): Promise<TokensInfo> {
+    const user = await this.userService.findOneById(userId);
+
+    if (!user || !user.hashedRefreshToken) {
+      throw new UnauthorizedException(
+        'Access denied. Please check if user exists or is logged in'
+      );
+    }
+
+    const refreshTokenMatches = await argon2.verify(
+      user.hashedRefreshToken,
+      refreshToken
+    );
+
+    if (!refreshTokenMatches) {
+      throw new UnauthorizedException(
+        'Access denied. Please check if user exists or is logged in'
+      );
+    }
+
+    const tokens = await this.signTokens({
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    });
+    await this.userService.updateHashedRefreshToken(
+      user.id,
+      tokens.refreshToken
+    );
+
+    return tokens;
   }
 
   async signTokens(jwtPayload: JwtPayload): Promise<TokensInfo> {

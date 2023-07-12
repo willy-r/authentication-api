@@ -39,7 +39,10 @@ export class AuthController {
   @MakePublic()
   @UseGuards(JwtRefreshGuard)
   @Get('refresh')
-  refreshTokens() {
-    return this.authService.refreshTokens();
+  async refreshTokens(
+    @GetCurrentUser('sub') userId: string,
+    @GetCurrentUser('refreshToken') refreshToken: string
+  ): Promise<TokensInfo> {
+    return await this.authService.refreshTokens(userId, refreshToken);
   }
 }

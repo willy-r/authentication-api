@@ -34,6 +34,14 @@ export class UserService {
     });
   }
 
+  async findOneById(id: string): Promise<User> {
+    return await this.prismaService.user.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
   async updateHashedRefreshToken(
     userId: string,
     refreshToken: string
