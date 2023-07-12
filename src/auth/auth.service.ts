@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
-import { SignUpDto } from './dtos';
+import * as argon2 from 'argon2';
+import { SignInDto, SignUpDto } from './dtos';
 import { UserService } from '../user/user.service';
 import { JwtPayload, TokensInfo } from './types';
 
@@ -14,8 +14,32 @@ export class AuthService {
     private readonly configService: ConfigService
   ) {}
 
-  signIn() {
-    return 'I am sign in!';
+  async signIn(signInDto: SignInDto): Promise<TokensInfo> {
+    const user = await this.userService.findOneByEmail(signInDto.email);
+
+    const passwordMatches = await argon2.verify(
+      user?.hashedPassword || (await argon2.hash('dummy-pwd')),
+      signInDto.password
+    );
+
+    // Guard condition.
+    if (!passwordMatches || !user) {
+      throw new UnauthorizedException(
+        'Invalid credentials. Please check your email and password'
+      );
+    }
+
+    const tokens = await this.signTokens({
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    });
+    await this.userService.updateHashedRefreshToken(
+      user.id,
+      tokens.refreshToken
+    );
+
+    return tokens;
   }
 
   async signUp(signUpDto: SignUpDto): Promise<TokensInfo> {

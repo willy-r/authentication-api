@@ -26,6 +26,14 @@ export class UserService {
     }
   }
 
+  async findOneByEmail(email: string): Promise<User> {
+    return await this.prismaService.user.findUnique({
+      where: {
+        email,
+      },
+    });
+  }
+
   async updateHashedRefreshToken(
     userId: string,
     refreshToken: string
