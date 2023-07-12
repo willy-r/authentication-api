@@ -59,8 +59,8 @@ export class AuthService {
     return tokens;
   }
 
-  logout() {
-    return 'I am logout';
+  async logout(userId: string): Promise<void> {
+    await this.userService.removeHashedRefreshToken(userId);
   }
 
   refreshTokens() {

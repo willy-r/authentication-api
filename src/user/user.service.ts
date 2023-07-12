@@ -48,4 +48,20 @@ export class UserService {
       },
     });
   }
+
+  async removeHashedRefreshToken(userId: string): Promise<void> {
+    // Only updates if hashedRefreshToken is not null to avoid
+    // unecessary updates on database.
+    await this.prismaService.user.updateMany({
+      where: {
+        id: userId,
+        hashedRefreshToken: {
+          not: null,
+        },
+      },
+      data: {
+        hashedRefreshToken: null,
+      },
+    });
+  }
 }

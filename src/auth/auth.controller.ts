@@ -11,7 +11,7 @@ import { AuthService } from './auth.service';
 import { SignInDto, SignUpDto } from './dtos';
 import { TokensInfo } from './types';
 import { JwtRefreshGuard } from './guards';
-import { MakePublic } from 'src/shared/decorators';
+import { GetCurrentUser, MakePublic } from 'src/shared/decorators';
 
 @Controller('auth')
 export class AuthController {
@@ -31,8 +31,9 @@ export class AuthController {
   }
 
   @Get('logout')
-  logout() {
-    return this.authService.logout();
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async logout(@GetCurrentUser('sub') userId: string): Promise<void> {
+    return await this.authService.logout(userId);
   }
 
   @MakePublic()
