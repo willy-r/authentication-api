@@ -22,6 +22,10 @@ import { JwtGuard } from './auth/guards';
         whitelist: true, // Only DTO fields are allowed.
       }),
     },
+    {
+      provide: APP_GUARD,
+      useClass: JwtGuard,
+    },
   ],
 })
 export class AppModule {}
