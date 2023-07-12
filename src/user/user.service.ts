@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import * as argon2 from 'argon2';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../config/prisma/prisma.service';
 import { CreateUserDto } from './dtos';
 
 @Injectable()
