@@ -17,7 +17,7 @@
 
 The main objective of this project is to create a simple authentication API to understand the use of JWT tokens, refresh tokens and role based authorization with Bearer Token Authentication strategy. It was built with [`NestJS`](https://nestjs.com/) and [`PostgreSQL`](https://www.postgresql.org/).
 
-For more details, check the [**📚 API Documentation**](#📚-api-documentation) section.
+For more details, check the [**📚 API Documentation**](#-api-documentation) section.
 
 [**Here**](#link) you can find a Linkedin post explaining more about why to use Bearer Token with JWT in a Authentication System.
 
