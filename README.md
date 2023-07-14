@@ -3,11 +3,11 @@
 
 ## Table of Contents:
 
-🎯 [Objective](#🎯-objective)  
-🏃 [Running the project](#🏃-running-the-project)  
+🎯 [Objective](#-objective)  
+🏃 [Running the project](#-running-the-project)  
 📄 [Scripts](#-scripts)  
-📚 [API Documentation](#📚-api-documentation)  
-🚧 [Troubleshooting](#🚧-troubleshooting)
+📚 [API Documentation](#-api-documentation)  
+🚧 [Troubleshooting](#-troubleshooting)
 
 
 ---
