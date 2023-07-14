@@ -40,6 +40,4 @@ export class UserController {
     );
     return plainToInstance(UserResponseDto, user);
   }
-
-  // Route to delete by id. Only admin.
 }
