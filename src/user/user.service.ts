@@ -1,5 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { User } from '@prisma/client';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { User, UserRole } from '@prisma/client';
 import * as argon2 from 'argon2';
 import { PrismaService } from '../config/prisma/prisma.service';
 import { CreateUserDto } from './dtos';
@@ -75,5 +79,22 @@ export class UserService {
         hashedRefreshToken: null,
       },
     });
+  }
+
+  async updateUserRole(userId: string, userRole: UserRole): Promise<User> {
+    try {
+      return await this.prismaService.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          role: userRole,
+        },
+      });
+    } catch (err) {
+      if (err?.code === 'P2025') {
+        throw new NotFoundException(`Record ${userId} to update not found`);
+      }
+    }
   }
 }

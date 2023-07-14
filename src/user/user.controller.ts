@@ -1,9 +1,9 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 import { GetCurrentUser, Roles } from '../shared/decorators';
-import { UserResponseDto } from './dtos';
+import { UpdateUserRoleDto, UserResponseDto } from './dtos';
 import { UserService } from './user.service';
 import { RolesGuard } from '../shared/guards';
 
@@ -13,6 +13,12 @@ import { RolesGuard } from '../shared/guards';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get('me')
+  async getMe(@GetCurrentUser('sub') userId: string): Promise<UserResponseDto> {
+    const user = this.userService.findOneById(userId);
+    return plainToInstance(UserResponseDto, user);
+  }
+
   @Roles(UserRole.ADMIN)
   @UseGuards(RolesGuard)
   @Get()
@@ -21,9 +27,19 @@ export class UserController {
     return plainToInstance(UserResponseDto, users);
   }
 
-  @Get('me')
-  async getMe(@GetCurrentUser('sub') userId: string): Promise<UserResponseDto> {
-    const user = this.userService.findOneById(userId);
+  @Roles(UserRole.ADMIN)
+  @UseGuards(RolesGuard)
+  @Put('update-role/:id')
+  async updateUserRole(
+    @Param('id') userId: string,
+    @Body() updateUserRoleDto: UpdateUserRoleDto
+  ): Promise<UserResponseDto> {
+    const user = await this.userService.updateUserRole(
+      userId,
+      updateUserRoleDto.newRole
+    );
     return plainToInstance(UserResponseDto, user);
   }
+
+  // Route to delete by id. Only admin.
 }
