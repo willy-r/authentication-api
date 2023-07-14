@@ -1,73 +1,83 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Authentication API - NestJS + PostgreSQL
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Table of Contents:
 
-## Description
+🎯 [Objective](#🎯-objective)  
+🏃 [Running the project](#🏃-running-the-project)  
+📄 [Scripts](#-scripts)  
+📚 [API Documentation](#📚-api-documentation)  
+🚧 [Troubleshooting](#🚧-troubleshooting)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+---
 
-```bash
-$ pnpm install
-```
 
-## Running the app
+## 🎯 Objective
+
+The main objective of this project is to create a simple authentication API to understand the use of JWT tokens, refresh tokens and role based authorization with Bearer Token Authentication strategy. It was built with [`NestJS`](https://nestjs.com/) and [`PostgreSQL`](https://www.postgresql.org/).
+
+For more details, check the [**📚 API Documentation**](#📚-api-documentation) section.
+
+[**Here**](#link) you can find a Linkedin post explaining more about why to use Bearer Token with JWT in a Authentication System.
+
+
+## 🏃 Running the project
+
+You should have a **Docker** environment with support to **Docker Compose V2**.
+
+> ⚠️ _This project uses bash scripts to make some commands easier to run and was tested only on a Linux machine. If you are using Windows, I highly recommend you running this project inside a WSL2 distro, or using Git Bash as your terminal._
+
+Open your terminal in the root folder and type:
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+sh ./scripts/run.sh
 ```
 
-## Test
+This script will make sure to build your images and in subsequent runs, it will skip the installation step and directly start all containers.
+
+To stop running containers, just type:
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+sh ./scripts/stop.sh
 ```
 
-## Support
+and all your containers will be dropped and volumes will be removed.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
+## 📄 Scripts
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Beyond `run.sh` and `stop.sh`, we have other helper scripts:
 
-## License
+- `run-db.sh`: Run only database specific containers, when you want to run the application without Docker
 
-Nest is [MIT licensed](LICENSE).
+
+## 📚 API Documentation
+
+After running the server, an enteractive documetation with [`Swagger`](https://swagger.io/) will be available at [`localhost:3000/docs`](localhost:3000/docs)
+
+You can also execute a command to seed the database with users to use with API endpoints:
+```bash
+pnpm prisma db seed
+```
+
+> ⚠️ After that two users will be available for authentication:
+>
+> - **Admin User** Email: admin@admin.com; Password: admin123
+> - **Regular User** Email: user@user.com; Password: user123
+
+
+## 🚧 Troubleshooti
+
+
+ng
+
+- Make sure you have these ports available before running the project:
+  - **`3000`**: Used by Nest API
+- Make sure your Docker daemon is running!
+- Make sure you are using a newer version of Docker that supports Docker Compose V2! **This project does not use `docker-compose`** (a.k.a. V1) because this version will no longer be supported from the end of June 2023.
+- If you are somehow receiving `Permission denied` when trying to run any scripts, run
+  ```sh
+  chmod +x ./*.sh && chmod +x ./docker/*.sh
+  ```
+  to make sure your terminal can execute utility scripts.
