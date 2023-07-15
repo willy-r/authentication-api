@@ -21,6 +21,11 @@ For more details, check the [**📚 API Documentation**](#-api-documentation) se
 
 [**Here**](#link) you can find a Linkedin post explaining more about why to use Bearer Token with JWT in a Authentication System.
 
+<details>
+  <summary><b>Functionality diagram</b1></summary>
+  <img src="./docs/auth_with_tokens.png" alt="Diagram explaining the functionality of using JWT tokens">
+</details>
+
 
 ## 🏃 Running the project
 
@@ -54,7 +59,7 @@ Beyond `run.sh` and `stop.sh`, we have other helper scripts:
 
 ## 📚 API Documentation
 
-After running the server, an enteractive documetation with [`Swagger`](https://swagger.io/) will be available at [`localhost:3000/docs`](localhost:3000/docs)
+After running the server, an enteractive documetation with [`Swagger`](https://swagger.io/) will be available at [`localhost:3000/docs`](http://localhost:3000/docs)
 
 You can also execute a command to seed the database with users to use with API endpoints:
 ```bash
@@ -67,10 +72,7 @@ pnpm prisma db seed
 > - **Regular User** Email: user@user.com; Password: user123
 
 
-## 🚧 Troubleshooti
-
-
-ng
+## 🚧 Troubleshooting
 
 - Make sure you have these ports available before running the project:
   - **`3000`**: Used by Nest API
