@@ -19,7 +19,7 @@ The main objective of this project is to create a simple authentication API to u
 
 For more details, check the [**📚 API Documentation**](#-api-documentation) section.
 
-[**Here**](#link) you can find a Linkedin post explaining more about why to use Bearer Token with JWT in a Authentication System.
+[**Here**](https://www.linkedin.com/posts/william-rodrigues-dev_github-willy-rauthentication-api-simple-activity-7087053399656980480-ksU4?utm_source=share&utm_medium=member_desktop) you can find a Linkedin post explaining more about why to use Bearer Token with JWT in a Authentication System.
 
 <details>
   <summary><b>Functionality diagram</b1></summary>
