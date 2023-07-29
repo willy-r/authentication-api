@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { userStub } from 'src/user/test/stubs';
 import { AuthController } from '../auth.controller';
 import { AuthService } from '../auth.service';
-import { TokensInfo } from '../types';
 import { SignInDto } from '../dtos';
-import { tokensInfoStub, userStub } from './stubs';
+import { tokensInfoStub } from './stubs';
 
 jest.mock('../auth.service');
 
@@ -24,25 +24,19 @@ describe('AuthController Unit', () => {
   });
 
   describe('signIn()', () => {
-    describe('when signIn is called', () => {
-      let tokensInfo: TokensInfo;
-      let signInDto: SignInDto;
+    const signInDto: SignInDto = {
+      email: userStub().email,
+      password: '123',
+    };
 
-      beforeEach(async () => {
-        signInDto = {
-          email: userStub().email,
-          password: '123',
-        };
-        tokensInfo = await authController.signIn(signInDto);
-      });
+    it('when signIn is called then it should call AuthService', async () => {
+      await authController.signIn(signInDto);
+      expect(authService.signIn).toHaveBeenCalledWith(signInDto);
+    });
 
-      it('then it should call AuthService', () => {
-        expect(authService.signIn).toHaveBeenCalledWith(signInDto);
-      });
-
-      it('then it should return tokens info', () => {
-        expect(tokensInfo).toEqual(tokensInfoStub());
-      });
+    it('when signIn is called then it should return tokens info', async () => {
+      const tokensInfo = await authController.signIn(signInDto);
+      expect(tokensInfo).toEqual(tokensInfoStub());
     });
   });
 });

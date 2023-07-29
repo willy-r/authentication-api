@@ -17,8 +17,8 @@ export class AuthService {
   async signIn(signInDto: SignInDto): Promise<TokensInfo> {
     const user = await this.userService.findOneByEmail(signInDto.email);
 
-    const passwordMatches = await argon2.verify(
-      user?.hashedPassword || (await argon2.hash('dummy-pwd')), // To avoid timing attacks.
+    const passwordMatches = await this.verifyPasswords(
+      user?.hashedPassword,
       signInDto.password
     );
 
@@ -34,6 +34,7 @@ export class AuthService {
       email: user.email,
       role: user.role,
     });
+
     await this.userService.updateHashedRefreshToken(
       user.id,
       tokens.refreshToken
@@ -119,5 +120,15 @@ export class AuthService {
       refreshToken,
       accessType: 'Bearer',
     };
+  }
+
+  async verifyPasswords(
+    hashedPassword: string | undefined,
+    plainPassword: string
+  ): Promise<boolean> {
+    return await argon2.verify(
+      hashedPassword || (await argon2.hash('dummy-pwd')), // To avoid timing attacks.
+      plainPassword
+    );
   }
 }

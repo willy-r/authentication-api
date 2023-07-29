@@ -7,8 +7,16 @@ export const userStub = (): User => {
     name: 'User Test',
     role: UserRole.USER,
     hashedPassword: 'mock-hashed-password',
-    hashedRefreshToken: 'hashed-refresh-token',
+    hashedRefreshToken: 'mock-hashed-refresh-token',
     createdAt: new Date('2023-07-27 00:00:00'),
     updatedAt: new Date('2023-07-27 00:00:00'),
   };
+};
+
+export const usersStub = (): User[] => {
+  return [userStub(), userStub()];
+};
+
+export const updateRoleUserStub = (): User => {
+  return { ...userStub(), role: UserRole.ADMIN };
 };
