@@ -7,3 +7,11 @@ export const tokensInfoStub = (): TokensInfo => {
     accessType: 'Bearer',
   };
 };
+
+export const updatedTokensInfoStub = (): TokensInfo => {
+  return {
+    ...tokensInfoStub(),
+    accessToken: 'mock-access-token',
+    refreshToken: 'updated-mock-refresh-token',
+  };
+};
