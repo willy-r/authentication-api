@@ -20,3 +20,7 @@ export const usersStub = (): User[] => {
 export const updateRoleUserStub = (): User => {
   return { ...userStub(), role: UserRole.ADMIN };
 };
+
+export const unauthenticatedUserStub = (): User => {
+  return { ...userStub(), hashedRefreshToken: null };
+};

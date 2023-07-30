@@ -76,7 +76,7 @@ export class AuthService {
       );
     }
 
-    const refreshTokenMatches = await argon2.verify(
+    const refreshTokenMatches = this.verifyRefreshTokens(
       user.hashedRefreshToken,
       refreshToken
     );
@@ -130,5 +130,12 @@ export class AuthService {
       hashedPassword || (await argon2.hash('dummy-pwd')), // To avoid timing attacks.
       plainPassword
     );
+  }
+
+  async verifyRefreshTokens(
+    hashedRefreshToken: string,
+    refreshToken: string
+  ): Promise<boolean> {
+    return await argon2.verify(hashedRefreshToken, refreshToken);
   }
 }
