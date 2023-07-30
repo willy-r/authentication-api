@@ -1,12 +1,19 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude } from 'class-transformer';
 
-@Expose()
 export class UserResponseDto {
+  id: string;
+  email: string;
+  name?: string;
+  role: string;
+
   @Exclude()
   hashedPassword: string;
-
   @Exclude()
   hashedRefreshToken?: string;
+  @Exclude()
+  createdAt: string;
+  @Exclude()
+  updatedAt: string;
 
   constructor(partial: Partial<UserResponseDto>) {
     Object.assign(this, partial);

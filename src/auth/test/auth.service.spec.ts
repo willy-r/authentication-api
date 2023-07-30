@@ -11,7 +11,7 @@ import { JwtPayload } from '../types';
 
 jest.mock('src/user/user.service');
 
-describe('AuthService', () => {
+describe('AuthService Unit', () => {
   let authService: AuthService;
   let userService: UserService;
   let configService: ConfigService;
