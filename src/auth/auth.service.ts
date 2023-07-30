@@ -81,8 +81,6 @@ export class AuthService {
       refreshToken
     );
 
-    console.log({ refreshTokenMatches });
-
     if (!refreshTokenMatches) {
       throw new UnauthorizedException(
         'Access denied. Please check if user exists or is logged in'

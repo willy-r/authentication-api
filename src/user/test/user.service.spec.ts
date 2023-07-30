@@ -5,7 +5,6 @@ import { UserService } from '../user.service';
 import { PrismaServiceMock } from './mocks';
 import { CreateUserDto } from '../dtos';
 import { createUserStub, userStub, usersStub } from './stubs';
-import { tokensInfoStub } from 'src/auth/test/stubs';
 
 describe('UserService Unit', () => {
   let userService: UserService;
