@@ -31,11 +31,13 @@ describe('AuthController Unit', () => {
 
     it('when signIn is called then it should call AuthService', async () => {
       await authController.signIn(signInDto);
+
       expect(authService.signIn).toHaveBeenCalledWith(signInDto);
     });
 
     it('when signIn is called then it should return tokens info', async () => {
       const tokensInfo = await authController.signIn(signInDto);
+
       expect(tokensInfo).toEqual(updatedTokensInfoStub());
     });
   });
@@ -49,11 +51,13 @@ describe('AuthController Unit', () => {
 
     it('when signUp is called then it should call AuthService', async () => {
       await authController.signUp(signUpDto);
+
       expect(authService.signUp).toHaveBeenCalledWith(signUpDto);
     });
 
     it('when signUp is called then it should return tokens info', async () => {
       const tokensInfo = await authController.signUp(signUpDto);
+
       expect(tokensInfo).toEqual(tokensInfoStub());
     });
   });
@@ -63,6 +67,7 @@ describe('AuthController Unit', () => {
 
     it('when logout is called then it should call AuthService', async () => {
       await authController.logout(userId);
+
       expect(authService.logout).toHaveBeenCalledWith(userId);
     });
 
@@ -77,6 +82,7 @@ describe('AuthController Unit', () => {
 
     it('when refreshTokens is called then it should call AuthService', async () => {
       await authController.refreshTokens(userId, refreshToken);
+
       expect(authService.refreshTokens).toHaveBeenCalledWith(
         userId,
         refreshToken
@@ -88,6 +94,7 @@ describe('AuthController Unit', () => {
         userId,
         refreshToken
       );
+
       expect(tokensInfo).toEqual(updatedTokensInfoStub());
       expect(tokensInfo.refreshToken).not.toBe(refreshToken);
     });

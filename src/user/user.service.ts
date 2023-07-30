@@ -14,7 +14,7 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const { password, ...data } = createUserDto;
-    const hashedPassword = await argon2.hash(password);
+    const hashedPassword = await this.hashSecret(password);
     try {
       return await this.prismaService.user.create({
         data: {
@@ -54,7 +54,7 @@ export class UserService {
     userId: string,
     refreshToken: string
   ): Promise<void> {
-    const hashedRefreshToken = await argon2.hash(refreshToken);
+    const hashedRefreshToken = await this.hashSecret(refreshToken);
     await this.prismaService.user.update({
       where: {
         id: userId,
@@ -96,5 +96,9 @@ export class UserService {
         throw new NotFoundException(`Record ${userId} to update not found`);
       }
     }
+  }
+
+  async hashSecret(plainSecret: string): Promise<string> {
+    return await argon2.hash(plainSecret);
   }
 }

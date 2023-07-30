@@ -24,3 +24,7 @@ export const updateRoleUserStub = (): User => {
 export const unauthenticatedUserStub = (): User => {
   return { ...userStub(), hashedRefreshToken: null };
 };
+
+export const createUserStub = (): User => {
+  return { ...userStub(), hashedRefreshToken: null };
+};

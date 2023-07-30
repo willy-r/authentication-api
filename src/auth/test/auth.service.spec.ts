@@ -37,8 +37,10 @@ describe('AuthService Unit', () => {
     };
 
     it('when signIn is called then it should call UserService', async () => {
-      authService.signTokens = jest.fn().mockResolvedValue(tokensInfoStub());
-      authService.verifyPasswords = jest.fn().mockResolvedValue(true);
+      jest
+        .spyOn(authService, 'signTokens')
+        .mockResolvedValueOnce(tokensInfoStub());
+      jest.spyOn(authService, 'verifyPasswords').mockResolvedValueOnce(true);
       await authService.signIn(signInDto);
 
       expect(userService.findOneByEmail).toHaveBeenCalledWith(signInDto.email);
@@ -49,16 +51,18 @@ describe('AuthService Unit', () => {
     });
 
     it('when signIn is called then it should return tokens info', async () => {
-      authService.signTokens = jest.fn().mockResolvedValue(tokensInfoStub());
-      authService.verifyPasswords = jest.fn().mockResolvedValue(true);
+      jest
+        .spyOn(authService, 'signTokens')
+        .mockResolvedValueOnce(tokensInfoStub());
+      jest.spyOn(authService, 'verifyPasswords').mockResolvedValueOnce(true);
       const tokensInfo = await authService.signIn(signInDto);
 
       expect(tokensInfo).toEqual(tokensInfoStub());
     });
 
     it('when signIn is called then it should throw UnauthorizedException for user not found', async () => {
-      authService.verifyPasswords = jest.fn().mockResolvedValue(true);
-      userService.findOneByEmail = jest.fn().mockResolvedValue(null);
+      jest.spyOn(authService, 'verifyPasswords').mockResolvedValueOnce(true);
+      jest.spyOn(userService, 'findOneByEmail').mockResolvedValueOnce(null);
 
       await expect(authService.signIn(signInDto)).rejects.toThrow(
         UnauthorizedException
@@ -66,7 +70,7 @@ describe('AuthService Unit', () => {
     });
 
     it('when signIn is called then it should throw UnauthorizedException for invalid password', async () => {
-      authService.verifyPasswords = jest.fn().mockResolvedValue(false);
+      jest.spyOn(authService, 'verifyPasswords').mockResolvedValueOnce(false);
 
       await expect(authService.signIn(signInDto)).rejects.toThrow(
         UnauthorizedException
@@ -82,7 +86,9 @@ describe('AuthService Unit', () => {
     };
 
     it('when signUp is called then it should call UserService', async () => {
-      authService.signTokens = jest.fn().mockResolvedValue(tokensInfoStub());
+      jest
+        .spyOn(authService, 'signTokens')
+        .mockResolvedValueOnce(tokensInfoStub());
       await authService.signUp(signUpDto);
 
       expect(userService.create).toHaveBeenCalledWith(signUpDto);
@@ -93,16 +99,18 @@ describe('AuthService Unit', () => {
     });
 
     it('when signUp is called then it should return tokens info', async () => {
-      authService.signTokens = jest.fn().mockResolvedValue(tokensInfoStub());
+      jest
+        .spyOn(authService, 'signTokens')
+        .mockResolvedValueOnce(tokensInfoStub());
       const tokensInfo = await authService.signUp(signUpDto);
 
       expect(tokensInfo).toEqual(tokensInfoStub());
     });
 
     it('when signUp is called then it should throw ConflictException for already created user', async () => {
-      userService.create = jest
-        .fn()
-        .mockRejectedValue(new ConflictException('Email already exists'));
+      jest
+        .spyOn(userService, 'create')
+        .mockRejectedValueOnce(new ConflictException('Email already exists'));
 
       await expect(authService.signUp(signUpDto)).rejects.toThrow(
         ConflictException
@@ -129,10 +137,12 @@ describe('AuthService Unit', () => {
     const refreshToken = tokensInfoStub().refreshToken;
 
     it('when refreshTokens is called then it should call UserService', async () => {
-      authService.verifyRefreshTokens = jest.fn().mockResolvedValue(true);
-      authService.signTokens = jest
-        .fn()
-        .mockResolvedValue(updatedTokensInfoStub());
+      jest
+        .spyOn(authService, 'verifyRefreshTokens')
+        .mockResolvedValueOnce(true);
+      jest
+        .spyOn(authService, 'signTokens')
+        .mockResolvedValueOnce(updatedTokensInfoStub());
       await authService.refreshTokens(userId, refreshToken);
 
       expect(userService.findOneById).toHaveBeenCalledWith(userId);
@@ -143,10 +153,12 @@ describe('AuthService Unit', () => {
     });
 
     it('when refreshTokens is called then it should return updated refresh token', async () => {
-      authService.verifyRefreshTokens = jest.fn().mockResolvedValue(true);
-      authService.signTokens = jest
-        .fn()
-        .mockResolvedValue(updatedTokensInfoStub());
+      jest
+        .spyOn(authService, 'verifyRefreshTokens')
+        .mockResolvedValueOnce(true);
+      jest
+        .spyOn(authService, 'signTokens')
+        .mockResolvedValueOnce(updatedTokensInfoStub());
       const tokensInfo = await authService.refreshTokens(userId, refreshToken);
 
       expect(tokensInfo).toEqual(updatedTokensInfoStub());
@@ -154,23 +166,28 @@ describe('AuthService Unit', () => {
     });
 
     it('when refreshTokens is called then it should throw UnauthorizedException for user not found', async () => {
-      userService.findOneById = jest.fn().mockResolvedValue(null);
+      jest.spyOn(userService, 'findOneById').mockResolvedValueOnce(null);
+
       await expect(
         authService.refreshTokens(userId, refreshToken)
       ).rejects.toThrow(UnauthorizedException);
     });
 
     it('when refreshTokens is called then it should throw UnauthorizedException for unauthenticated user', async () => {
-      userService.findOneById = jest
-        .fn()
-        .mockResolvedValue(unauthenticatedUserStub());
+      jest
+        .spyOn(userService, 'findOneById')
+        .mockResolvedValueOnce(unauthenticatedUserStub());
+
       await expect(
         authService.refreshTokens(userId, refreshToken)
       ).rejects.toThrow(UnauthorizedException);
     });
 
     it('when refreshTokens is called then it should throw UnauthorizedException if refresh tokens do not match', async () => {
-      authService.verifyRefreshTokens = jest.fn().mockResolvedValue(false);
+      jest
+        .spyOn(authService, 'verifyRefreshTokens')
+        .mockResolvedValueOnce(false);
+
       await expect(
         authService.refreshTokens(userId, refreshToken)
       ).rejects.toThrow(UnauthorizedException);
@@ -186,8 +203,8 @@ describe('AuthService Unit', () => {
     };
 
     it('when signTokens is called then it should call ConfigService', async () => {
-      configService.get = jest.fn().mockReturnValue('mock-env');
-      jwtService.signAsync = jest.fn().mockResolvedValue('mock-token');
+      jest.spyOn(configService, 'get').mockReturnValue('mock-env');
+      jest.spyOn(jwtService, 'signAsync').mockResolvedValue('mock-token');
       await authService.signTokens(jwtPayload);
 
       expect(configService.get).toHaveBeenCalledWith('ACCESS_TOKEN_SECRET');
@@ -197,31 +214,45 @@ describe('AuthService Unit', () => {
     });
 
     it('when signTokens is called then it should call JwtService', async () => {
-      configService.get = jest.fn().mockReturnValue('mock-env');
-      jwtService.signAsync = jest.fn().mockResolvedValue('mock-token');
+      jest
+        .spyOn(configService, 'get')
+        .mockReturnValueOnce('mock-access-token-secret')
+        .mockReturnValueOnce('mock-access-token-expires')
+        .mockReturnValueOnce('mock-refresh-token-secret')
+        .mockReturnValueOnce('mock-refresh-token-expires');
+      jest.spyOn(jwtService, 'signAsync').mockResolvedValue('mock-token');
       await authService.signTokens(jwtPayload);
 
-      const jwtOptions: JwtSignOptions = {
-        secret: 'mock-env',
-        expiresIn: 'mock-env',
+      const accessTokenOptions: JwtSignOptions = {
+        secret: 'mock-access-token-secret',
+        expiresIn: 'mock-access-token-expires',
       };
+      const refreshTokenOptions: JwtSignOptions = {
+        secret: 'mock-refresh-token-secret',
+        expiresIn: 'mock-refresh-token-expires',
+      };
+
+      expect(jwtService.signAsync).toHaveBeenNthCalledWith(
+        1,
+        jwtPayload,
+        accessTokenOptions
+      );
       expect(jwtService.signAsync).toHaveBeenNthCalledWith(
         2,
         jwtPayload,
-        jwtOptions
+        refreshTokenOptions
       );
     });
 
     it('when signTokens is called then it should return tokens', async () => {
-      configService.get = jest.fn().mockReturnValue('mock-env');
-      jwtService.signAsync = jest.fn().mockResolvedValue('mock-token');
+      jest.spyOn(configService, 'get').mockReturnValue('mock-env');
+      jest
+        .spyOn(jwtService, 'signAsync')
+        .mockResolvedValueOnce(tokensInfoStub().accessToken)
+        .mockResolvedValueOnce(tokensInfoStub().refreshToken);
       const tokensInfo = await authService.signTokens(jwtPayload);
 
-      expect(tokensInfo).toEqual({
-        accessToken: 'mock-token',
-        refreshToken: 'mock-token',
-        accessType: 'Bearer',
-      });
+      expect(tokensInfo).toEqual(tokensInfoStub());
     });
   });
 });

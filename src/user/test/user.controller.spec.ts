@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { NotFoundException } from '@nestjs/common';
 import { UserController } from '../user.controller';
 import { UserService } from '../user.service';
 import { updateRoleUserStub, userStub, usersStub } from './stubs';
 import { UpdateUserRoleDto, UserResponseDto } from '../dtos';
-import { NotFoundException } from '@nestjs/common';
 
 jest.mock('../user.service');
 
@@ -28,6 +28,7 @@ describe('UserController Unit', () => {
 
     it('when getMe is called then it should call UserService', async () => {
       await userController.getMe(userId);
+
       expect(userService.findOneById).toHaveBeenCalledWith(userId);
     });
 
@@ -43,6 +44,7 @@ describe('UserController Unit', () => {
   describe('findAll()', () => {
     it('when findAll is called then it should call UserService', async () => {
       await userController.findAll();
+
       expect(userService.findAll).toHaveBeenCalledWith();
     });
 
@@ -58,7 +60,7 @@ describe('UserController Unit', () => {
     });
 
     it('given no users when findAll is called then it should return empty array', async () => {
-      userService.findAll = jest.fn().mockResolvedValue([]);
+      jest.spyOn(userService, 'findAll').mockResolvedValueOnce([]);
       const users = await userController.findAll();
 
       expect(users).toHaveLength(0);
@@ -104,9 +106,9 @@ describe('UserController Unit', () => {
     });
 
     it('when updateUserRole is called then it should throw NotFoundException for user not found', async () => {
-      userService.updateUserRole = jest
-        .fn()
-        .mockRejectedValue(
+      jest
+        .spyOn(userService, 'updateUserRole')
+        .mockRejectedValueOnce(
           new NotFoundException(`Record ${userId} to update not found`)
         );
 

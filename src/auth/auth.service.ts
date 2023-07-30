@@ -76,10 +76,12 @@ export class AuthService {
       );
     }
 
-    const refreshTokenMatches = this.verifyRefreshTokens(
+    const refreshTokenMatches = await this.verifyRefreshTokens(
       user.hashedRefreshToken,
       refreshToken
     );
+
+    console.log({ refreshTokenMatches });
 
     if (!refreshTokenMatches) {
       throw new UnauthorizedException(

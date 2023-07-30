@@ -11,7 +11,6 @@ export const tokensInfoStub = (): TokensInfo => {
 export const updatedTokensInfoStub = (): TokensInfo => {
   return {
     ...tokensInfoStub(),
-    accessToken: 'mock-access-token',
     refreshToken: 'updated-mock-refresh-token',
   };
 };
