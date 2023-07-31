@@ -17,7 +17,7 @@ export const usersStub = (): User[] => {
   return [userStub(), userStub()];
 };
 
-export const updateRoleUserStub = (): User => {
+export const updatedRoleUserStub = (): User => {
   return { ...userStub(), role: UserRole.ADMIN };
 };
 
@@ -27,4 +27,8 @@ export const unauthenticatedUserStub = (): User => {
 
 export const createUserStub = (): User => {
   return { ...userStub(), hashedRefreshToken: null };
+};
+
+export const updatedRefreshTokenUserStub = (): User => {
+  return { ...userStub(), hashedRefreshToken: 'updated-hashed-refresh-token' };
 };

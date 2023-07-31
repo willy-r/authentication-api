@@ -1,10 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { UserService } from '../user.service';
 import { PrismaServiceMock } from './mocks';
 import { CreateUserDto } from '../dtos';
-import { createUserStub, userStub, usersStub } from './stubs';
+import {
+  createUserStub,
+  updatedRefreshTokenUserStub,
+  updatedRoleUserStub,
+  userStub,
+  usersStub,
+} from './stubs';
+import { tokensInfoStub } from 'src/auth/test/stubs';
 
 describe('UserService Unit', () => {
   let userService: UserService;
@@ -141,6 +148,98 @@ describe('UserService Unit', () => {
       jest.spyOn(prismaService.user, 'findUnique').mockResolvedValueOnce(null);
 
       expect(await userService.findOneById(userId)).toBeNull();
+    });
+  });
+
+  describe('updateHashedRefreshToken()', () => {
+    const userId = userStub().id;
+    const refreshToken = tokensInfoStub().refreshToken;
+
+    it('when updateHashedRefreshToken is called then it should call PrismaService', async () => {
+      jest
+        .spyOn(userService, 'hashSecret')
+        .mockResolvedValueOnce(
+          updatedRefreshTokenUserStub().hashedRefreshToken
+        );
+      await userService.updateHashedRefreshToken(userId, refreshToken);
+
+      expect(prismaService.user.update).toHaveBeenCalledWith({
+        where: {
+          id: userId,
+        },
+        data: {
+          hashedRefreshToken: updatedRefreshTokenUserStub().hashedRefreshToken,
+        },
+      });
+    });
+
+    it('when updateHashedRefreshToken is called then it should return nothing', async () => {
+      expect(
+        await userService.updateHashedRefreshToken(userId, refreshToken)
+      ).toBeUndefined();
+    });
+  });
+
+  describe('removeHashedRefreshToken()', () => {
+    const userId = userStub().id;
+
+    it('when removeHashedRefreshToken is called then it should call PrismaService', async () => {
+      await userService.removeHashedRefreshToken(userId);
+
+      expect(prismaService.user.updateMany).toHaveBeenCalledWith({
+        where: {
+          id: userId,
+          hashedRefreshToken: {
+            not: null,
+          },
+        },
+        data: {
+          hashedRefreshToken: null,
+        },
+      });
+    });
+
+    it('when removeHashedRefreshToken is called then it should return nothing', async () => {
+      expect(
+        await userService.removeHashedRefreshToken(userId)
+      ).toBeUndefined();
+    });
+  });
+
+  describe('updateUserRole()', () => {
+    const userId = userStub().id;
+    const newRole = updatedRoleUserStub().role;
+
+    it('when updateUserRole is called then it should call PrismaService', async () => {
+      await userService.updateUserRole(userId, newRole);
+
+      expect(prismaService.user.update).toHaveBeenCalledWith({
+        where: {
+          id: userId,
+        },
+        data: {
+          role: newRole,
+        },
+      });
+    });
+
+    it('when updateUserRole is called then it should return user with updated role', async () => {
+      jest
+        .spyOn(prismaService.user, 'update')
+        .mockResolvedValueOnce(updatedRoleUserStub());
+      const user = await userService.updateUserRole(userId, newRole);
+
+      expect(user).toEqual(updatedRoleUserStub());
+    });
+
+    it('when updateUserRole is called then it should throw NotFoundException for user not found', async () => {
+      jest
+        .spyOn(prismaService.user, 'update')
+        .mockRejectedValueOnce({ code: 'P2025' });
+
+      await expect(userService.updateUserRole(userId, newRole)).rejects.toThrow(
+        NotFoundException
+      );
     });
   });
 });

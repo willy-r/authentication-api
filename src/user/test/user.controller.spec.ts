@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
 import { UserController } from '../user.controller';
 import { UserService } from '../user.service';
-import { updateRoleUserStub, userStub, usersStub } from './stubs';
+import { updatedRoleUserStub, userStub, usersStub } from './stubs';
 import { UpdateUserRoleDto, UserResponseDto } from '../dtos';
 
 jest.mock('../user.service');
@@ -71,7 +71,7 @@ describe('UserController Unit', () => {
   describe('updateUserRole()', () => {
     const userId = userStub().id;
     const updateUserRoleDto: UpdateUserRoleDto = {
-      newRole: updateRoleUserStub().role,
+      newRole: updatedRoleUserStub().role,
     };
 
     it('when updateUserRole is called then it should call UserService', async () => {
@@ -90,7 +90,7 @@ describe('UserController Unit', () => {
       );
 
       expect(user).toBeInstanceOf(UserResponseDto);
-      expect(user.role).toBe(updateRoleUserStub().role);
+      expect(user.role).toBe(updatedRoleUserStub().role);
       expect(user.role).not.toBe(userStub().role);
     });
 

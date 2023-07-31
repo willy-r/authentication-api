@@ -5,5 +5,7 @@ export const PrismaServiceMock = jest.fn().mockReturnValue({
     create: jest.fn().mockResolvedValue(createUserStub()),
     findMany: jest.fn().mockResolvedValue(usersStub()),
     findUnique: jest.fn().mockResolvedValue(userStub()),
+    update: jest.fn(),
+    updateMany: jest.fn(),
   },
 });
